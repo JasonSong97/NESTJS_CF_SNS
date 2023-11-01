@@ -1,0 +1,21 @@
+{
+     // IntelliSense를 사용하여 가능한 특성에 대해 알아보세요.
+     // 기존 특성에 대한 설명을 보려면 가리킵니다.
+     // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
+     "version": "0.2.0",
+     "configurations": [
+          {
+               "type": "node",
+               "request": "launch",
+               "name": "Debug NestJS",
+               "runtimeExecutable": "yarn",
+               "runtimeArgs": [ 
+                    "start:debug" // yarn start:dev
+               ],
+               "console": "integratedTerminal", // vscode 터미널
+               "restart": true,
+               "port": 9229, // NestJS 디버깅 기본 포트
+               "autoAttachChildProcesses": true // 디버거를 프로세스에 붙일까?
+          }
+     ]
+}
