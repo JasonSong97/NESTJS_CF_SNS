@@ -14,22 +14,34 @@ export class PostsController {
   }
 
   @Get(':id')
-  getPost(@Param('id') id: string) {
+  getPost(
+    @Param('id') id: string
+  ) {
     return this.postsService.getPostById(+id);
   }
 
   @Post()
-  postPosts(@Body('author') author?: string, @Body('title') title?: string, @Body('content') content?: string) {
-    return this.postsService.createPost(author, title, content);
+  postPosts(
+    @Body('authorId') authorId: number, 
+    @Body('title') title: string, 
+    @Body('content') content: string
+  ) {
+    return this.postsService.createPost(authorId, title, content);
   }
 
   @Put(':id')
-  putPost(@Param('id') id: string, @Body('author') author: string, @Body('title') title: string, @Body('content') content: string) {
-    return this.postsService.updatePost(+id, author, title, content);
+  putPost(
+    @Param('id') id: string, 
+    @Body('title') title: string, 
+    @Body('content') content: string
+  ) {
+    return this.postsService.updatePost(+id, title, content);
   }
 
   @Delete(':id')
-  deletePost(@Param('id') id: string) {
+  deletePost(
+    @Param('id') id: string
+  ) {
     return this.postsService.deletePost(+id);
   }
 }

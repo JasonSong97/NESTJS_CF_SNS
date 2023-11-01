@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { PostsModule } from './posts/posts.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostsModel } from './posts/entities/posts.entity';
+import { UsersModule } from './users/users.module';
+import { UsersModel } from './users/entities/users.entity';
 
 @Module({
   imports: [
@@ -16,10 +18,12 @@ import { PostsModel } from './posts/entities/posts.entity';
       password: 'postgres',
       database: 'postgres',
       entities: [
-        PostsModel
+        PostsModel,
+        UsersModel,
       ], // 데이터와 연동될 모델
       synchronize: true, // TypeORM-DB 싱크 맞추기 -> 개발환경 true | production모드 false
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
