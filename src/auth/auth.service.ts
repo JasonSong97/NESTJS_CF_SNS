@@ -58,7 +58,13 @@ export class AuthService {
                secret: JWT_SECRET,
                // secondes (초 단위)
                expiresIn: isRefreshToken ? 3600 : 300, // ? refresh : access
-               
           });
+     }
+
+     loginUser(user: Pick<UsersModel, 'email' | 'id'>) {
+          return {
+               accessToken: this.signToken(user, false),
+               refreshToken: this.signToken(user, true),
+          }
      }
 }
