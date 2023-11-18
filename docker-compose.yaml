@@ -1,0 +1,12 @@
+services: # 정의
+  postgres:
+    image: postgres:15 # postgres 15버전 이미지 사용할 것이다.
+    restart: always
+    volumes: # 왼쪽(현재 데이터) : 오른쪽(도커 이미지 데이터) => (동기화)
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres # 데이터베이스 이름

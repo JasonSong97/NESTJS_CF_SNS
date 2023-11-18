@@ -7,7 +7,8 @@ import { Repository } from 'typeorm';
 export class UsersService {
 
      constructor(
-          @InjectRepository(UsersModel) private readonly usersRepository: Repository<UsersModel>,
+          @InjectRepository(UsersModel) 
+          private readonly usersRepository: Repository<UsersModel>,
      ) {}
 
      async createUser(nickname: string, email: string, password: string) {

@@ -11,13 +11,15 @@ import { UsersModel } from './users/entities/users.entity';
   imports: [
     PostsModule,
     TypeOrmModule.forRoot({ // forRoot(): TypeORM-NestJS 연결고리
-      type: 'postgres', // 데이터베이스 타입
+      // 데이터베이스 타입
+      type: 'postgres', 
       host: '127.0.0.1',
       port: 5432,
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
       entities: [
+        // entity 만들때마다 등록
         PostsModel,
         UsersModel,
       ], // 데이터와 연동될 모델
