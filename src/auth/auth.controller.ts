@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Headers } from '@nestjs/common';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
@@ -8,12 +8,17 @@ export class AuthController {
 
   @Post('login/email')
   loginEmail(
-    @Body('email') email: string,
-    @Body('password') password: string,
+    // {authorization: 'Basic {token}'}
+    // {authorization: 'Bearer {token}'}
+    @Headers('authorization') rawToken: string,
   ) {
+    // email:password -> Base64
+    // aksjd3kj3heajkdblqjhb1jhsda -> email:password
+    const token = this.authService.extractTokenFromHeader(rawToken, false);
+    const  credential = this.authService.decodeBasicToken(token);
     return this.authService.loginWithEmail({
-      email,
-      password,
+      email: credential.email,
+      password: credential.password,
     });
   }
 
