@@ -6,8 +6,32 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) {}
 
+  @Post('token/refresh')
+  postTokenRefresh(
+    @Headers('authorization') rawToken: string,
+  ) {
+    const token = this.authService.extractTokenFromHeader(rawToken, true);
+    const newToken = this.authService.rotateToken(token, true);
+    // {refreshToken: {token}}
+    return {
+      refreshToken: newToken,
+    }
+  }
+
+  @Post('token/access')
+  postTokenAccess(
+    @Headers('authorization') rawToken: string,
+  ) {
+    const token = this.authService.extractTokenFromHeader(rawToken, true);
+    const newToken = this.authService.rotateToken(token, false);
+    // {accessToken: {token}}
+    return {
+      accessToken: newToken,
+    }
+  }
+
   @Post('login/email')
-  loginEmail(
+  postLoginEmail(
     // {authorization: 'Basic {token}'}
     // {authorization: 'Bearer {token}'}
     @Headers('authorization') rawToken: string,
@@ -23,7 +47,7 @@ export class AuthController {
   }
 
   @Post('register/email')
-  registerEmail(
+  postRegisterEmail(
     @Body('nickname') nickname: string,
     @Body('email') email: string,
     @Body('password') password: string,
