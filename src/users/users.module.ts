@@ -8,6 +8,8 @@ import { UsersModel } from './entities/users.entity';
   imports: [
     TypeOrmModule.forFeature([UsersModel]),
   ],
+  // 외부에서 사용하려면 exports 필요
+  exports: [UsersService],
   controllers: [UsersController],
   providers: [UsersService],
 })
