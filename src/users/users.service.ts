@@ -19,7 +19,7 @@ export class UsersService {
                     nickname: user.nickname,
                },
           });
-          if (!nicknameExists) {
+          if (nicknameExists) {
                throw new BadRequestException('이미 존재하는 nickname입니다.');
           }
 
@@ -28,7 +28,7 @@ export class UsersService {
                     email: user.email,
                },
           });
-          if (!emailExists) {
+          if (emailExists) {
                throw new BadRequestException('이미 존재하는 email입니다.');
           }
 
