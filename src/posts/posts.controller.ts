@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { PostsService } from './posts.service';
 
 @Controller('posts')
@@ -19,6 +19,7 @@ export class PostsController {
   @Get(':id')
   getPost(
     // QueryParameter는 무조건 string으로 온다. 따라서 Int로 바꿔줘야한다. -> ParseIntPipe (자동으로 에러 던져줌)
+    // NestJS가 DI해주는 것
     @Param('id', ParseIntPipe) id: number 
   ) {
     return this.postsService.getPostById(id);
@@ -30,7 +31,8 @@ export class PostsController {
   postPosts(
     @Body('authorId') authorId: number, 
     @Body('title') title: string, 
-    @Body('content') content: string
+    @Body('content') content: string,
+    // @Body('isPublic', new DefaultValuePipe(true)) isPublic: boolean, // 매번 새롭게 생성하는 것
   ) {
     return this.postsService.createPost(authorId, title, content);
   }
