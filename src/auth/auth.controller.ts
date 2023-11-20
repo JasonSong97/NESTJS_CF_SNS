@@ -2,6 +2,7 @@ import { Body, Controller, Post, Headers, UseGuards, Request } from '@nestjs/com
 import { AuthService } from './auth.service';
 import { MaxLengthPipe, MinLengthPipe, PasswordPipe } from './pipe/password.pipe';
 import { BasicTokenGuard } from './guard/basic-token.guard';
+import { AccessTokenGuard, RefreshTokenGuard } from './guard/bearer-tokne.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -9,6 +10,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('token/refresh')
+  @UseGuards(RefreshTokenGuard)
   postTokenRefresh(
     @Headers('authorization') rawToken: string,
   ) {
@@ -21,6 +23,7 @@ export class AuthController {
   }
 
   @Post('token/access')
+  @UseGuards(RefreshTokenGuard)
   postTokenAccess(
     @Headers('authorization') rawToken: string,
   ) {
@@ -38,7 +41,6 @@ export class AuthController {
     // {authorization: 'Basic {token}'}
     // {authorization: 'Bearer {token}'}
     @Headers('authorization') rawToken: string,
-    @Request() req,
   ) {
     // email:password -> Base64
     // aksjd3kj3heajkdblqjhb1jhsda -> email:password
