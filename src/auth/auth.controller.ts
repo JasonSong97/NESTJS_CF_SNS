@@ -1,8 +1,8 @@
-import { Body, Controller, Post, Headers, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Post, Headers, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MaxLengthPipe, MinLengthPipe, PasswordPipe } from './pipe/password.pipe';
 import { BasicTokenGuard } from './guard/basic-token.guard';
-import { AccessTokenGuard, RefreshTokenGuard } from './guard/bearer-tokne.guard';
+import { RefreshTokenGuard } from './guard/bearer-tokne.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -10,7 +10,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('token/refresh')
-  @UseGuards(RefreshTokenGuard)
+  @UseGuards(RefreshTokenGuard) // access token을 refresh 할때도 refresh token이 필요
   postTokenRefresh(
     @Headers('authorization') rawToken: string,
   ) {
@@ -23,7 +23,7 @@ export class AuthController {
   }
 
   @Post('token/access')
-  @UseGuards(RefreshTokenGuard)
+  @UseGuards(RefreshTokenGuard) // access token을 refresh 할때도 refresh token이 필요
   postTokenAccess(
     @Headers('authorization') rawToken: string,
   ) {
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   @Post('login/email')
-  @UseGuards(BasicTokenGuard)
+  @UseGuards(BasicTokenGuard) // 로그인시에만 Basic token guard
   postLoginEmail(
     // {authorization: 'Basic {token}'}
     // {authorization: 'Bearer {token}'}

@@ -2,6 +2,11 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { AuthService } from '../auth.service';
 import { UsersService } from 'src/users/users.service';
 
+/**
+ * BearerTokenGuard는 사용할일이 없다.
+ * 단지, AccessTokenGuard와 RefreshTokenGuard를 사용하기 위해서 존재한다.
+ */
+
 @Injectable()
 export class BearerTokenGuard implements CanActivate {
 
@@ -10,7 +15,7 @@ export class BearerTokenGuard implements CanActivate {
           private readonly usersService: UsersService,
      ) {}
 
-     async canActivate(context: ExecutionContext): Promise<boolean> {
+     async canActivate(context: ExecutionContext): Promise<boolean> { // false: Guard 통과 X true: Guard 통과 O
           const req = context.switchToHttp().getRequest();
      
           const rawToken = req.headers['authorization'];
@@ -19,7 +24,7 @@ export class BearerTokenGuard implements CanActivate {
           }
 
           const token = this.authService.extractTokenFromHeader(rawToken, true);
-          const result = await this.authService.verifyToken(token);
+          const result = await this.authService.verifyToken(token); // token내부의 payload = result
 
           /**
            * request에 넣을 정보
@@ -41,11 +46,11 @@ export class BearerTokenGuard implements CanActivate {
 @Injectable()
 export class AccessTokenGuard extends BearerTokenGuard {
 
-     async canActivate(context: ExecutionContext): Promise<boolean> {
-          await super.canActivate(context);
-
+     async canActivate(context: ExecutionContext): Promise<boolean> { // false: Guard 통과 X true: Guard 통과 O
+          await super.canActivate(context); // 부모 실행
           const req = context.switchToHttp().getRequest();
 
+          // 토큰 type이 access 인지 확인
           if (req.tokenType !== 'access') {
                throw new UnauthorizedException('Access Token이 없습니다.');
           }
@@ -56,11 +61,11 @@ export class AccessTokenGuard extends BearerTokenGuard {
 @Injectable()
 export class RefreshTokenGuard extends BearerTokenGuard {
 
-     async canActivate(context: ExecutionContext): Promise<boolean> {
-          await super.canActivate(context);
-
+     async canActivate(context: ExecutionContext): Promise<boolean> { // false: Guard 통과 X true: Guard 통과 O
+          await super.canActivate(context); // 부모 실행
           const req = context.switchToHttp().getRequest();
 
+          // 토큰 type이 refresh 인지 확인
           if (req.tokenType !== 'refresh') {
                throw new UnauthorizedException('Refresh Token이 없습니다.');
           }

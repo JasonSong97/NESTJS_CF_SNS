@@ -83,7 +83,7 @@ export class AuthService {
           }
 
           /**
-           * 파라미터
+           * bcrypt.compare(1, 2) 파라미터
            * 
            * 1. 입력된 비밀번호
            * 2. 기존 해시 (hash) -> 사용자 정보에 저장된 hash
@@ -126,7 +126,7 @@ export class AuthService {
       * 
       * 3) 아무나 접근 할 수 없는 정보 {private route}를 접근 할때는 
       *   accessToken을 Header에 추가해서 요청과 함께 보낸다.
-      *   예) {authorization: 'Bearer {token}'} -> 발급받은 JWT 토큰을 그대로 넣었을 때
+      *   예) {authorization: 'Bearer {access token}'} -> 발급받은 JWT 토큰을 그대로 넣었을 때
       * 
       * 4) 토큰과 요청을 함께 받은 서버는 토큰 검증을 통해 현재 요청을 보낸
       *   사용자가 누구인지 알 수 있다.

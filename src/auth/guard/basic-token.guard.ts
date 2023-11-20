@@ -23,7 +23,7 @@ export class BasicTokenGuard implements CanActivate {
      ) {}
      
      async canActivate(context: ExecutionContext): Promise<boolean> { // false: Guard 통과 X true: Guard 통과 O
-          // switchToHttp, switchToRpc, switchToWs
+          // context -> switchToHttp, switchToRpc, switchToWs
           const req = context.switchToHttp().getRequest(); // 요청 가져오기
 
           // {authorization: 'Basic 213ibd1ebhwqjbhj'}
