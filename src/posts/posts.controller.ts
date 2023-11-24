@@ -1,5 +1,6 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, Request } from '@nestjs/common';
 import { PostsService } from './posts.service';
+import { AccessTokenGuard } from 'src/auth/guard/bearer-tokne.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -28,12 +29,14 @@ export class PostsController {
   // 3) POST /posts
   //  POST를 생성한다.
   @Post()
+  @UseGuards(AccessTokenGuard) // 여기에 사용자의 id가 있다.
   postPosts(
-    @Body('authorId') authorId: number, 
+    @Request() req: any,
     @Body('title') title: string, 
     @Body('content') content: string,
     // @Body('isPublic', new DefaultValuePipe(true)) isPublic: boolean, // 매번 새롭게 생성하는 것
   ) {
+    const authorId = req.user.id;
     return this.postsService.createPost(authorId, title, content);
   }
 
