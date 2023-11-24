@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, Request } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { AccessTokenGuard } from 'src/auth/guard/bearer-tokne.guard';
+import { UsersModel } from 'src/users/entities/users.entity';
+import { User } from 'src/users/decorator/user.decorator';
 
 @Controller('posts')
 export class PostsController {
@@ -31,13 +33,14 @@ export class PostsController {
   @Post()
   @UseGuards(AccessTokenGuard) // 여기에 사용자의 id가 있다.
   postPosts(
-    @Request() req: any,
+    //@Request() req: any, // const authorId = req.user.id;
+    // user 데코레이터를 사용할 수 있는 상황: AccessTokenGuard를 통과했을 때 왜냐하면 Request 객체에 사용자 정보가 있어야하기 때문에
+    @User() user: UsersModel, 
     @Body('title') title: string, 
     @Body('content') content: string,
     // @Body('isPublic', new DefaultValuePipe(true)) isPublic: boolean, // 매번 새롭게 생성하는 것
   ) {
-    const authorId = req.user.id;
-    return this.postsService.createPost(authorId, title, content);
+    return this.postsService.createPost(user.id, title, content);
   }
 
   // 4) PUT /posts/:id
