@@ -2,8 +2,11 @@ import { Column, Entity, OneToMany } from "typeorm";
 import { RolesEnum } from "../const/roles.const";
 import { PostsModel } from "src/posts/entities/posts.entity";
 import { BaseModel } from "src/common/entity/base.entity";
-import { IsEmail, IsString, Length } from "class-validator";
+import { IsEmail, IsString, Length, ValidationArguments } from "class-validator";
 import { min } from "rxjs";
+import { lengthValidationMessage } from "src/common/validation-message/length-validation.message";
+import { stringValidationMessage } from "src/common/validation-message/string-validation.message";
+import { emailValidationMessage } from "src/common/validation-message/email-validation.message";
 
 @Entity()
 export class UsersModel extends BaseModel{
@@ -14,9 +17,11 @@ export class UsersModel extends BaseModel{
           // 2)
           unique: true,
      })
-     @IsString()
+     @IsString({
+          message: stringValidationMessage,
+     })
      @Length(1, 20,{
-          message: '닉네임은 1~20자 사이로 입력해주세요.'
+          message: lengthValidationMessage,
      })
      // 1) 길이가 20넘지 않기
      // 2) 유니크
@@ -25,15 +30,21 @@ export class UsersModel extends BaseModel{
      @Column({
           unique: true
      })
-     @IsString()
-     @IsEmail()
+     @IsString({
+          message: stringValidationMessage,
+     })
+     @IsEmail({}, {
+          message: emailValidationMessage,
+     })
      // 1) 유니크
      email: string;
 
      @Column()
-     @IsString()
+     @IsString({
+          message: stringValidationMessage,
+     })
      @Length(3, 8,{
-          message: '비밀번호는 3~8자 사이로 입력해주세요.'
+          message: lengthValidationMessage,
      })
      password: string;
 
