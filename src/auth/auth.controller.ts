@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { MaxLengthPipe, MinLengthPipe, PasswordPipe } from './pipe/password.pipe';
 import { BasicTokenGuard } from './guard/basic-token.guard';
 import { RefreshTokenGuard } from './guard/bearer-token.guard';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -54,15 +55,8 @@ export class AuthController {
 
   @Post('register/email')
   postRegisterEmail(
-    @Body('nickname') nickname: string,
-    @Body('email') email: string,
-    // Pipe에서 걸리면 아래의 로직은 실행되지 않는다. + 생성자가 있기 때문에 new를 띄운다.
-    @Body('password', new MaxLengthPipe(8, '비밀번호'), new MinLengthPipe(3, '비밀번호')) password: string, 
+    @Body() body: RegisterUserDto, 
   ) {
-    return this.authService.registerWithEmail({
-      email,
-      nickname,
-      password,
-    })
+    return this.authService.registerWithEmail(body);
   }
 }

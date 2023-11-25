@@ -4,6 +4,7 @@ import { UsersModel } from 'src/users/entities/users.entity';
 import { HASH_ROUNDS, JWT_SECRET } from './const/auth.const';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -100,7 +101,7 @@ export class AuthService {
           return this.loginUser(existingUser);
      }
 
-     async registerWithEmail(user: Pick<UsersModel, 'email' | 'nickname' | 'password'>) {
+     async registerWithEmail(user: RegisterUserDto) {
           const hash = await bcrypt.hash( // 내부에 salt가 내장
                user.password,
                // hash rounds
