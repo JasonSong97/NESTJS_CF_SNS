@@ -35,12 +35,12 @@ export class PostsController {
   postPosts(
     //@Request() req: any, // const authorId = req.user.id;
     // user 데코레이터를 사용할 수 있는 상황: AccessTokenGuard를 통과했을 때 왜냐하면 Request 객체에 사용자 정보가 있어야하기 때문에
-    @User() user: UsersModel, 
+    @User('id') userId: number, 
     @Body('title') title: string, 
     @Body('content') content: string,
     // @Body('isPublic', new DefaultValuePipe(true)) isPublic: boolean, // 매번 새롭게 생성하는 것
   ) {
-    return this.postsService.createPost(user.id, title, content);
+    return this.postsService.createPost(userId, title, content);
   }
 
   // 4) PUT /posts/:id
