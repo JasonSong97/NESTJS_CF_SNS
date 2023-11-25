@@ -2,7 +2,7 @@ import { Body, Controller, Post, Headers, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MaxLengthPipe, MinLengthPipe, PasswordPipe } from './pipe/password.pipe';
 import { BasicTokenGuard } from './guard/basic-token.guard';
-import { RefreshTokenGuard } from './guard/bearer-tokne.guard';
+import { RefreshTokenGuard } from './guard/bearer-token.guard';
 
 @Controller('auth')
 export class AuthController {
