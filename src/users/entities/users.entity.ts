@@ -46,7 +46,16 @@ export class UsersModel extends BaseModel{
      @Length(3, 8,{
           message: lengthValidationMessage,
      })
-     @Exclude() // Json 파싱 X
+     /**
+      * Request: toClassOnly -> class instance로 변환될 때만
+      * front -> back: plain object (JSON) -> class instance (DTO)
+      * 
+      * Response: toPlainOnly -> plain object로 변환될 때만
+      * back -> front: class instance (DTO) -> plain object (JSON)
+      */
+     @Exclude({
+          toPlainOnly: true, // Response 상황에만 적용
+     }) // Json 파싱 X
      password: string;
 
      @Column({
