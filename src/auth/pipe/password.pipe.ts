@@ -8,10 +8,7 @@ export class PasswordPipe implements PipeTransform {
       * metadata : Paramtype(body, query, param), metatype(id: string할때 string 의미), data(@Body('userId')라면 userId)
       */
      transform(value: any, metadata: ArgumentMetadata) {
-          if (value.toString().length > 8) {
-               throw new BadRequestException('비밀번호는 8자 이하로 입력해주세요!');
-          }
-
+          if (value.toString().length > 8) throw new BadRequestException('비밀번호는 8자 이하로 입력해주세요!');
           return value.toString();
      }
 }
@@ -21,14 +18,11 @@ export class MaxLengthPipe implements PipeTransform {
 
      constructor(
           private readonly length: number, 
-          private readonly subject: string
+          private readonly subject: string,
      ) {}
 
      transform(value: any, metadata: ArgumentMetadata) {
-          if (value.toString().length > this.length) {
-               throw new BadRequestException(`${this.subject}의 최대 길이는 ${this.length}입니다.`);
-          }
-
+          if (value.toString().length > this.length) throw new BadRequestException(`${this.subject}의 최대 길이는 ${this.length}입니다.`);
           return value.toString();
      }
 }
@@ -38,14 +32,11 @@ export class MinLengthPipe implements PipeTransform {
 
      constructor(
           private readonly length: number, 
-          private readonly subject: string
+          private readonly subject: string,
      ) {}
 
      transform(value: any, metadata: ArgumentMetadata) {
-          if (value.toString().length < this.length) {
-               throw new BadRequestException(`${this.subject}의 최소 길이는 ${this.length}입니다.`);
-          }
-
+          if (value.toString().length < this.length) throw new BadRequestException(`${this.subject}의 최소 길이는 ${this.length}입니다.`);
           return value.toString();
      }
 }

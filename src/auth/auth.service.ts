@@ -79,9 +79,7 @@ export class AuthService {
            * 3. 모두 통과되면 찾은 사용자 정보 반환
            */
           const existingUser = await this.usersService.getUserByEmail(user.email);
-          if (!existingUser) {
-               throw new UnauthorizedException('존재하지 않는 사용자입니다.');
-          }
+          if (!existingUser) throw new UnauthorizedException('존재하지 않는 사용자입니다.');
 
           /**
            * bcrypt.compare(1, 2) 파라미터
@@ -90,9 +88,7 @@ export class AuthService {
            * 2. 기존 해시 (hash) -> 사용자 정보에 저장된 hash
            */
           const passOK = await bcrypt.compare(user.password, existingUser.password);
-          if (!passOK) {
-               throw new UnauthorizedException('비밀번호가 틀렸습니다.');
-          }
+          if (!passOK) throw new UnauthorizedException('비밀번호가 틀렸습니다.');
           return existingUser;
      }
 
@@ -147,19 +143,15 @@ export class AuthService {
      /**
       * Header로부터 토큰을 받을 때
       * 
-      * {authorization: 'Basic {token}'}
-      * {authorization: 'Bearer {token}'}
+      * LOGIN: {authorization: 'Basic {token}'}
+      * ACCESS API: {authorization: 'Bearer {token}'}
       */
      extractTokenFromHeader(header: string, isBearer: boolean) {
-          // 'Basic {token}'
-          // [Basic, {token}]]
-          // 'Bearer {token}'
-          // [Bearer, {token}]]
+          // 'Basic {token}' -> [Basic, {token}]]
+          // 'Bearer {token}' -> [Bearer, {token}]]
           const splitToken = header.split(' ');
           const prefix = isBearer ? 'Bearer' : 'Basic';
-          if (splitToken.length !== 2 || splitToken[0] !== prefix) {
-               throw new UnauthorizedException('잘못된 토큰입니다!');
-          }
+          if (splitToken.length !== 2 || splitToken[0] !== prefix) throw new UnauthorizedException('잘못된 토큰입니다!');
 
           const token = splitToken[1];
           return token;
@@ -168,12 +160,12 @@ export class AuthService {
      /**
       * Basic asdln1k4jnrfsdkfh123edsa
       * 
-      * 1) asdln1k4jnrfsdkfh123edsa -> email:password
+      * 1) asdln1k4jnrfsdkfh123edsa -> Decoding ->  email:password
       * 2) email:password -> [email, password]
       * 3) {email: email, password: password}
       */
      decodeBasicToken(base64String: string) {
-          // asdln1k4jnrfsdkfh123edsa -> email:password
+          // asdln1k4jnrfsdkfh123edsa -> Decoding -> email:password
           const decoded = Buffer.from(base64String, 'base64').toString('utf8');
           // email:password -> [email, password]
           const split = decoded.split(':');
@@ -204,10 +196,8 @@ export class AuthService {
            * sub -> id(사용자)
            * type : 'access' | 'refresh'
            */
-          if (decoded.type !== 'refresh') {
-               throw new UnauthorizedException('토큰 재발급은 Refresh 토큰으로만 가능합니다!');
-          }
-          return this.signToken({
+          if (decoded.type !== 'refresh') throw new UnauthorizedException('토큰 재발급은 Refresh 토큰으로만 가능합니다!');
+          return this.signToken({ // 토큰 새로 생성
                ...decoded,
           }, isRefreshToken);
      }
@@ -215,7 +205,7 @@ export class AuthService {
      /**
       * 토큰 검증
       */
-     verifyToken(token: string) {
+     verifyToken(token: string) { // bearer-token,guard.ts로부터 213ibd1ebhwqjbhj 받음
           try {
                return this.jwtService.verify(token, {
                     secret: JWT_SECRET,

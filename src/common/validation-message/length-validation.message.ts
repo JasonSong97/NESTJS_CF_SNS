@@ -12,9 +12,6 @@ export const lengthValidationMessage = (args: ValidationArguments) => {
       * 4) object -> 검증하고 있는 객체 (사용 잘 안함)
       * 5) property -> 검증되고 있는 객체의 프로퍼티 이름 ex) nickname
       */
-     if (args.constraints.length === 2) {
-          return `${args.property}은 ${args.constraints[0]}~ ${args.constraints[1]} 글자를 입력해주세요!`;
-     } else {
-          return `${args.property}는 최소 ${args.constraints[0]} 글자를 입력 해주세요!`;
-     }
+     if (args.constraints.length === 2) return `${args.property}은 ${args.constraints[0]}~ ${args.constraints[1]} 글자를 입력해주세요!`;
+     else return `${args.property}는 최소 ${args.constraints[0]} 글자를 입력 해주세요!`;
 }

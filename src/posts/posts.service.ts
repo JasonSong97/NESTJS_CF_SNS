@@ -67,9 +67,7 @@ export class PostsService {
                ]
           });
 
-          if (!post) {
-               throw new NotFoundException();
-          }
+          if (!post) throw new NotFoundException();
           return post;
      }
      
@@ -103,17 +101,9 @@ export class PostsService {
                },
           });
 
-          if (!post) {
-               throw new NotFoundException();
-          }
-
-          if (title) {
-               post.title = title;
-          }
-
-          if (content) {
-               post.content = content;
-          }
+          if (!post) throw new NotFoundException();
+          if (title) post.title = title;
+          if (content) post.content = content;
 
           const newPost = await this.postsRepository.save(post);
           return newPost;
@@ -125,9 +115,7 @@ export class PostsService {
                     id: postId,
                },
           });
-          if (!post) {
-               throw new NotFoundException();
-          }
+          if (!post) throw new NotFoundException();
           await this.postsRepository.delete(postId);
           return postId;
      }

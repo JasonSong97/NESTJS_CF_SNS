@@ -11,7 +11,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('token/refresh')
-  @UseGuards(RefreshTokenGuard) // access token을 refresh 할때도 refresh token이 필요
+  @UseGuards(RefreshTokenGuard) // refresh token을 refresh 할때 refresh token이 필요
   postTokenRefresh(
     @Headers('authorization') rawToken: string,
   ) {

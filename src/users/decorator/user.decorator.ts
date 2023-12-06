@@ -11,7 +11,6 @@ export const User = createParamDecorator((data: keyof UsersModel | undefined, co
      const user = req.user as UsersModel; // 사용자가 있다는 가정
      if (!user) throw new InternalServerErrorException('User 데코레이터는 AccessTokenGuard와 함께 사용해야합니다.'); // user 데코레이터를 accessToken과 함께 사용하지 않으면 발생
 
-     if (data) return user[data]; // data가 undefined가 아니면
-
+     if (data) return user[data]; // data가 undefined가 아니면, @User('id') -> return user[id]
      return user; // User 데코레이터를 parameter에 사용했을 때, parameter의 arg 값 return
 });

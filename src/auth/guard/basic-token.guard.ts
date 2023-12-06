@@ -25,21 +25,17 @@ export class BasicTokenGuard implements CanActivate {
      async canActivate(context: ExecutionContext): Promise<boolean> { // false: Guard 통과 X true: Guard 통과 O
           // context -> switchToHttp, switchToRpc, switchToWs
           const req = context.switchToHttp().getRequest(); // 요청 가져오기
-
           // {authorization: 'Basic 213ibd1ebhwqjbhj'}
-          // 213ibd1ebhwqjbhj
-          const rawToken = req.headers['authorization'];
-          if (!rawToken) {
-               throw new UnauthorizedException('토큰이 없습니다1');
-          }
+          const rawToken = req.headers['authorization'];  // Basic 213ibd1ebhwqjbhj
+          if (!rawToken) throw new UnauthorizedException('토큰이 없습니다1');
 
-          const token = this.authService.extractTokenFromHeader(rawToken, false);
-          const {email, password} = this.authService.decodeBasicToken(token);
+          const token = this.authService.extractTokenFromHeader(rawToken, false); // 213ibd1ebhwqjbhj
+          const {email, password} = this.authService.decodeBasicToken(token); // 213ibd1ebhwqjbhj -> email, password
           const user = await this.authService.authenticateWithEmailAndPassword({
                email,
                password,
           });
-          req.user = user; // 응답전까지 살아있음
+          req.user = user; // response 전까지 
           return true;
      }
 }
