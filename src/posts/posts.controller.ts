@@ -4,7 +4,7 @@ import { AccessTokenGuard } from 'src/auth/guard/bearer-token.guard';
 import { User } from 'src/users/decorator/user.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { paginatePostDto } from './dto/paginate-post.dto';
+import { PaginatePostDto } from './dto/paginate-post.dto';
 
 @Controller('posts')
 export class PostsController {
@@ -15,9 +15,10 @@ export class PostsController {
   //  모든 posts를 가져온다.
   @Get()
   getPosts(
-    @Query() query: paginatePostDto,
+    @Query() query: PaginatePostDto,
   ) {
-    return this.postsService.getAllPosts();
+    return this.postsService.paginatePosts(query);
+    //return this.postsService.getAllPosts();
   }
 
   // 2) GET /posts/:id
