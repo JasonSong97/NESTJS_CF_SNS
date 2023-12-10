@@ -119,10 +119,10 @@ export class PostsService {
           return { 
                data: posts,
                cursor: {
-                    after: lastItem?.id, // null, undefined일 수도 있으니까
+                    after: lastItem?.id ?? null, // null, undefined일 수도 있으니까
                },
                count: posts.length,
-               next: nextUrl?.toString(), // ?: toString()도 null일 수 있어서 
+               next: nextUrl?.toString() ?? null, // ?: toString()도 null일 수 있어서 
           }
      }
 
