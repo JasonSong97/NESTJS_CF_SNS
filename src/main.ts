@@ -11,8 +11,7 @@ async function bootstrap() {
 
     // 어노테이션이 있으면 자동으로 Class Transformer가 적용되도록한다. 
     transformOptions: {
-      // 임의로 변환하는 것을 허용한다. @IsNumber(), @IsIn, @IsOptional .. 전부 허용
-      // 따라서 @Type(() => Number) 필요 없다
+      // 임의로 변환하는 것을 허용한다. @IsNumber(), @IsIn, @IsOptional .. 전부 허용 / 따라서 @Type(() => Number) 필요 없다
       enableImplicitConversion: true, 
     }
   }));
