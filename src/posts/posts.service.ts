@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PaginatePostDto } from './dto/paginate-post.dto';
+import { URL } from 'url';
+import { HOST, PROTOCOL } from 'src/common/const/env,const';
 
 export interface PostModel { // 외부 접근을 위해 export 추가
      id: number;
@@ -72,7 +74,7 @@ export class PostsService {
           const posts = await this.postsRepository.find({
                // where__id_more_than
                where: {
-                    id: MoreThan(dto.where__id_more_than ?? 0), // null이거나 undefined면 0으로
+                    id: MoreThan(dto.where__id_more_than ?? 0), // ??: null이거나 undefined면 0으로
                },
                // order__createdAt
                order: {
@@ -80,6 +82,27 @@ export class PostsService {
                },
                take: dto.take,
           });
+
+          // 해당되는 post가 0개 이상이면 마지막 post를 가져오고 아니면 null을 반환한다.
+          const lastItem = posts.length > 0 ? posts[posts.length - 1] : null;
+          
+          const nextUrl = lastItem && new URL(`${PROTOCOL}://${HOST}/posts`); // &&: lastItem이 존재할 경우
+          if (nextUrl) {
+               /**
+                * dto의 key값들을 루핑하면서 key값에 해당되는 value가 존재하면 param에 그대로 붙여넣는다.
+                * 단, where__id_more_than 값만 lastItem의 마지막 값으로 넣어준다.
+                */
+               for (const key of Object.keys(dto)) { // dto의 key 값들을 루핑
+                    if (dto[key]) {
+                         if (key !== 'where__id_more_than') {
+                              nextUrl.searchParams.append(key, dto[key]);
+                         }
+                    }
+               }
+
+               // where__id_more_than를 넣지 않고 GET요청시 nextURL에 where__id_more_than가 존재하지 않기 때문에
+               nextUrl.searchParams.append('where__id_more_than', lastItem.id.toString());
+          }
 
           /**
            * Response
@@ -94,6 +117,11 @@ export class PostsService {
 
           return { 
                data: posts,
+               cursor: {
+                    after: lastItem?.id, // null, undefined일 수도 있으니까
+               },
+               count: posts.length,
+               next: nextUrl?.toString(), // ?: toString()도 null일 수 있어서 
           }
      }
 
