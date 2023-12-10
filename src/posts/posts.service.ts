@@ -84,7 +84,8 @@ export class PostsService {
           });
 
           // 해당되는 post가 0개 이상이면 마지막 post를 가져오고 아니면 null을 반환한다.
-          const lastItem = posts.length > 0 ? posts[posts.length - 1] : null;
+          // posts.length === dto.take: 예를 들어 20개를 요청시 19개가 오면 다음 페이지가 없는 것이기 때문에 null로처리
+          const lastItem = posts.length > 0 && posts.length === dto.take ? posts[posts.length - 1] : null;
           
           const nextUrl = lastItem && new URL(`${PROTOCOL}://${HOST}/posts`); // &&: lastItem이 존재할 경우
           if (nextUrl) {
